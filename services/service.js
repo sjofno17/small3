@@ -13,8 +13,10 @@ const service = () => {
         
     };
 
-    const getCandyById = () => {
-        
+    const getCandyById = (id) => {
+        const candy = candies.filter(u => u.id == id);
+        if(candy.length == 0) { return -1 }
+        return candy[0];
     };
 
     const getAllOffers = () => {
@@ -25,18 +27,19 @@ const service = () => {
         return pinatas;
     };
 
-    const getPinataById = () => {
-        
-    };
-
-    const getCandyById = () => {
-        
+    const getPinataById = (id) => {
+        const pinata = pinatas.filter(u => u.id == id);
+        if(pinata.length == 0) { return -1 }
+        return pinata[0];
     };
 
     const createPinata = () => {
         
     };
 
+    const hitPinata = (id) => {
+        
+    };
 
     return {
         getAllCandies,
@@ -46,13 +49,8 @@ const service = () => {
         getAllPinatas,
         getPinataById,
         createPinata,
-        getPinataByIdHit // what to call this?
+        hitPinata
     };
-
-
 };
-
-
-
 
 module.exports = service();

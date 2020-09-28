@@ -1,13 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const service = require('./services/service');
 const port = 3000;
-
-
 const app = express();
 
 // Gets all candies within the application 
 app.get("/api/candies", (req, res) => {
-    
+    return res.json(service.getAllCandies());
 });
 
 // Creates a new candy (NO MODEL VALIDATION) and should return 
@@ -18,23 +17,29 @@ app.post("/api/candies", (req, res) => {
 
 // Gets a candy with a certain id
 app.get("/api/candies/{id}", (req, res) => {
-    
+    const id = req.params.id;
+    const result = service.getCandyById(id);
+    if(result === -1) { return res.status(404).send(); }
+    return res.json(result);
 });
 
 // Gets all offers within the application and the output should include the
 // nested candies within the offer object as seen in the Model Structure section
 app.get("/api/coffers", (req, res) => {
-    
+    return res.json(service.getAllOffers());
 });
 
 //  Gets all pinatas within the application - should contain all properties excluding surprise
 app.get("/api/pinatas", (req, res) => {
-    
+    return res.json(service.getAllPinatas());
 });
 
 //  Gets a pinata with a certain id - should contain all properties excluding surprise
 app.get("/api/pinatas/{id}", (req, res) => {
-    
+    const id = req.params.id;
+    const result = service.getPinataById(id);
+    if(result === -1) { return res.status(404).send(); }
+    return res.json(result);
 });
 
 //  Create a new pinata (NO MODEL VALIDATION) and should return the
