@@ -17,7 +17,7 @@ const service = () => {
 
     const getCandyById = (id) => {
         const candy = candies.filter(u => u.id == id);
-        if(candy.length == 0) { return -1 }
+        if(candy.length === 0) { return -1 }
         return candy[0];
     };
 
@@ -25,14 +25,26 @@ const service = () => {
         return offers;
     };
 
+    //should contain all properties excluding surprise - check    (and currenthits needs to be added)
     const getAllPinatas = () => {
-        return pinatas;
+        const newPinatas = [];
+        const getAll = pinatas;
+        getAll.map(u => {
+            let newPinata = {
+                id: u.id,
+                name: u.name,
+                maximumHits: u.maximumHits  };
+                newPinatas.push(newPinata);
+            newPinata = null;
+        });
+        return newPinatas;
     };
 
+    //should contain all properties excluding surprise - check
     const getPinataById = (id) => {
-        const pinata = pinatas.filter(u => u.id == id);
+        const pinata = getAllPinatas().filter(u => u.id == id);
         if(pinata.length == 0) { return -1 }
-        return pinata[0];
+        return pinata;
     };
 
     const createPinata = (pinata) => {
@@ -42,7 +54,7 @@ const service = () => {
         pinatas.push(pinata);
     };
 
-    const hitPinata = (id) => {
+    const hitPinata = (id, pinata) => {
         
     };
 
