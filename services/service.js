@@ -1,16 +1,18 @@
-
-const candies = require('../data.json').candies;
-const offers = require('../data.json').offers;
-const pinatas = require('../data.json').pinatas;
-
 const service = () => {
+    
+    const candies = require('../data.json').candies;
+    const offers = require('../data.json').offers;
+    const pinatas = require('../data.json').pinatas;
 
     const getAllCandies = () => {
         return candies;
     };
 
-    const createCandy = () => {
-        
+    const createCandy = (candy) => {
+        let highestId = 0;
+        candies.forEach(u => { if(u.id > highestId) { highestId = u.id; } });
+        candies.id = highestId + 1;
+        candies.push(candy);
     };
 
     const getCandyById = (id) => {
@@ -33,8 +35,11 @@ const service = () => {
         return pinata[0];
     };
 
-    const createPinata = () => {
-        
+    const createPinata = (pinata) => {
+        let highestId = 0;
+        pinatas.forEach(u => { if(u.id > highestId) { highestId = u.id; } });
+        pinatas.id = highestId + 1;
+        pinatas.push(pinata);
     };
 
     const hitPinata = (id) => {

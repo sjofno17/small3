@@ -4,7 +4,9 @@ const service = require('./services/service');
 const port = 3000;
 const app = express();
 
-// Gets all candies within the application 
+app.use(bodyParser.json());
+
+// Gets all candies within the application   *** DONE
 app.get("/api/candies", (req, res) => {
     return res.json(service.getAllCandies());
 });
@@ -12,12 +14,14 @@ app.get("/api/candies", (req, res) => {
 // Creates a new candy (NO MODEL VALIDATION) and should return 
 // the newly created model along with a proper status code
 app.post("/api/candies", (req, res) => {
-    
+    const { body } = req;
+    service.createCandy(body);
+    return res.status(201).send(body);
 });
 
-// Gets a candy with a certain id
-app.get("/api/candies/{id}", (req, res) => {
-    const id = req.params.id;
+// Gets a candy with a certain id    *** DONE
+app.get("/api/candies/:id", (req, res) => {
+    const { id } = req.params;
     const result = service.getCandyById(id);
     if(result === -1) { return res.status(404).send(); }
     return res.json(result);
@@ -29,14 +33,14 @@ app.get("/api/coffers", (req, res) => {
     return res.json(service.getAllOffers());
 });
 
-//  Gets all pinatas within the application - should contain all properties excluding surprise
+//  Gets all pinatas within the application - should contain all properties excluding surprise   
 app.get("/api/pinatas", (req, res) => {
     return res.json(service.getAllPinatas());
 });
 
 //  Gets a pinata with a certain id - should contain all properties excluding surprise
-app.get("/api/pinatas/{id}", (req, res) => {
-    const id = req.params.id;
+app.get("/api/pinatas/:id", (req, res) => {
+    const { id } = req.params;
     const result = service.getPinataById(id);
     if(result === -1) { return res.status(404).send(); }
     return res.json(result);
@@ -46,7 +50,9 @@ app.get("/api/pinatas/{id}", (req, res) => {
 // newly created model along with a proper status code. Here the model should also include a
 // surprise property which can either be a written text or an URL to a valid image (.jpg, .png, etc.) 
 app.post("/api/pinatas", (req, res) => {
-    
+    const { body } = req;
+    service.createPinata(body);
+    return res.status(201).send();
 });
 
 //  Hits a certain pinata until its hit limit has been reached.
@@ -57,16 +63,14 @@ app.post("/api/pinatas", (req, res) => {
 //             • If the surprise property value is a written text it should be appended to a file
 //               called surprises.txt which should reside in the root folder, where each surprises
 //               are separated by a newline
-//               Otherwise if it is an URL to an image it should be downloaded using the request
+//             • Otherwise if it is an URL to an image it should be downloaded using the request
 //               package and piped into a new file using a write stream, where the file should
 //               have the name of the pinata (+ the correct extension) and reside in a folder
 //               called images/ which should be in the root folder. 
 //      • If the hit limit has been reached the endpoint should return a status code 423 (Locked)
-app.get("/api/pinatas/{id}/hit", (req, res) => {
+app.get("/api/pinatas/:id/hit", (req, res) => {
     
 });
-
-
 
 
 app.listen(port, () => {
