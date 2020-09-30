@@ -4,6 +4,8 @@ const service = () => {
     const offers = require('../data.json').offers;
     const pinatas = require('../data.json').pinatas;
 
+
+    /* --------------- CANDY --------------- */
     const getAllCandies = () => {
         return candies;
     };
@@ -21,11 +23,13 @@ const service = () => {
         return candy[0];
     };
 
+    /* --------------- OFFER --------------- */
     const getAllOffers = () => {
         return offers;
     };
 
-    //should contain all properties excluding surprise - check    (and currenthits needs to be added)
+    /* --------------- PINATA --------------- */
+    //should contain all properties excluding surprise - check    (and currenthits needs to be added???)
     const getAllPinatas = () => {
         const newPinatas = [];
         const getAll = pinatas;
@@ -33,7 +37,9 @@ const service = () => {
             let newPinata = {
                 id: u.id,
                 name: u.name,
-                maximumHits: u.maximumHits  };
+                maximumHits: u.maximumHits//,
+                //currentHits: currentHits  
+            };
                 newPinatas.push(newPinata);
             newPinata = null;
         });

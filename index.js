@@ -6,6 +6,8 @@ const app = express();
 
 app.use(bodyParser.json());
 
+/* --------------- CANDY --------------- */
+
 // Gets all candies within the application   *** DONE
 app.get("/api/candies", (req, res) => {
     return res.json(service.getAllCandies());
@@ -27,11 +29,15 @@ app.get("/api/candies/:id", (req, res) => {
     return res.json(result);
 });
 
+/* --------------- OFFER --------------- */
+
 // Gets all offers within the application and the output should include the
 // nested candies within the offer object as seen in the Model Structure section
 app.get("/api/coffers", (req, res) => {
     return res.json(service.getAllOffers());
 });
+
+/* --------------- PINATA --------------- */
 
 //  Gets all pinatas within the application - should contain all properties excluding surprise   
 app.get("/api/pinatas", (req, res) => {
