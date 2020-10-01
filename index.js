@@ -13,7 +13,7 @@ app.get("/api/candies", (req, res) => {
     return res.json(service.getAllCandies());
 });
 
-// Creates a new candy (NO MODEL VALIDATION) and should return 
+// Creates a new candy (NO MODEL VALIDATION) and should return
 // the newly created model along with a proper status code
 app.post("/api/candies", (req, res) => {
     const { body } = req;
@@ -54,7 +54,7 @@ app.get("/api/pinatas/:id", (req, res) => {
 
 //  Create a new pinata (NO MODEL VALIDATION) and should return the
 // newly created model along with a proper status code. Here the model should also include a
-// surprise property which can either be a written text or an URL to a valid image (.jpg, .png, etc.) 
+// surprise property which can either be a written text or an URL to a valid image (.jpg, .png, etc.)
 app.post("/api/pinatas", (req, res) => {
     const { body } = req;
     service.createPinata(body);
@@ -64,15 +64,15 @@ app.post("/api/pinatas", (req, res) => {
 //  Hits a certain pinata until its hit limit has been reached.
 //      • If the hit was a success it should return a status code of 204 (No Content), unless it
 //        was the final blow than it should return a status code of 200 (OK) along with the
-//        surprise property from the pinata as a string (the surprise will only be returned a single time) 
-//      • A side-effect of the final blow should be one of the following:  
+//        surprise property from the pinata as a string (the surprise will only be returned a single time)
+//      • A side-effect of the final blow should be one of the following:
 //             • If the surprise property value is a written text it should be appended to a file
 //               called surprises.txt which should reside in the root folder, where each surprises
 //               are separated by a newline
 //             • Otherwise if it is an URL to an image it should be downloaded using the request
 //               package and piped into a new file using a write stream, where the file should
 //               have the name of the pinata (+ the correct extension) and reside in a folder
-//               called images/ which should be in the root folder. 
+//               called images/ which should be in the root folder.
 //      • If the hit limit has been reached the endpoint should return a status code 423 (Locked)
 app.get("/api/pinatas/:id/hit", (req, res) => {
     const { id } = req.params;
