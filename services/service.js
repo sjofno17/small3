@@ -4,17 +4,16 @@ const service = () => {
     const offers = require('../data.json').offers;
     const pinatas = require('../data.json').pinatas;
 
-
     /* --------------- CANDY --------------- */
     const getAllCandies = () => {
         return candies;
     };
 
-    //virkar ekki að bæta við candy?? :/
+    //hér er ein lei til að gera þetta create
     const createCandy = (candy) => {
         let highestId = 0;
         candies.forEach(u => { if(u.id > highestId) { highestId = u.id; } } );
-        candies.id = highestId + 1;
+        candy.id = highestId + 1;
         candies.push(candy);
         return candy;
     };
@@ -33,7 +32,7 @@ const service = () => {
                 id: u.id,
                 name: u.name,
                 candies: Array.from(u.candies)
-            });
+            }); //hér sækir hann bara id á candy í array
         });
         getOffers.forEach(u => {
             u.candies.forEach((candy, i) => {
@@ -44,21 +43,18 @@ const service = () => {
     };
 
     /* --------------- PINATA --------------- */
-    //should contain all properties excluding surprise - check    (and currenthits needs to be added???)
+    //should contain all properties excluding surprise - check  
     const getAllPinatas = () => {
-        const newPinatas = [];
-        const getAll = pinatas;
-        getAll.map(u => {
-            let newPinata = {
+        let getPinatas = [];
+        pinatas.forEach(u => {
+            getPinatas.push({
                 id: u.id,
                 name: u.name,
-                maximumHits: u.maximumHits//,
-                //currentHits: currentHits  
-            };
-                newPinatas.push(newPinata);
-            newPinata = null;
+                maximumHits: u.maximumHits,
+                currentHits: u.currentHits
+            });
         });
-        return newPinatas;
+        return getPinatas;
     };
 
     //should contain all properties excluding surprise - check
@@ -68,15 +64,25 @@ const service = () => {
         return pinata;
     };
 
+    //fæ bara nýja ID til að birtast í postman
     const createPinata = (pinata) => {
-        let highestId = 0;
-        pinatas.forEach(u => { if(u.id > highestId) { highestId = u.id; } });
-        pinatas.id = highestId + 1;
+        /*let highestId = 0;
+        pinatas.forEach(u => { if(u.id > highestId) { highestId = u.id; } }); 
+        pinata.id = highestId + 1;
         pinatas.push(pinata);
+        return pinata;*/
+        const newPinata = {
+            id: pinatas.length +1,
+            name: pinata.name,
+            surprise: pinata.surprise,
+            maximumHits: pinata.maximumHits
+        };
+        pinatas.push(newPinata);
+        return newPinata;
     };
 
-    const hitPinata = (id, pinata) => {
-        
+    const hitPinata = (id) => {
+        const pinata = pinatas.filter(u => u.id == id);
     };
 
     return {

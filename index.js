@@ -18,7 +18,7 @@ app.get("/api/candies", (req, res) => {
 app.post("/api/candies", (req, res) => {
     const { body } = req;
     service.createCandy(body);
-    return res.status(201).send(body);
+    return res.status(201).json(body);
 });
 
 // Gets a candy with a certain id    *** DONE
@@ -39,12 +39,12 @@ app.get("/api/offers", (req, res) => {
 
 /* --------------- PINATA --------------- */
 
-//  Gets all pinatas within the application - should contain all properties excluding surprise   
+//  Gets all pinatas within the application - should contain all properties excluding surprise   *** DONE
 app.get("/api/pinatas", (req, res) => {
     return res.json(service.getAllPinatas());
 });
 
-//  Gets a pinata with a certain id - should contain all properties excluding surprise
+//  Gets a pinata with a certain id - should contain all properties excluding surprise    *** DONE
 app.get("/api/pinatas/:id", (req, res) => {
     const { id } = req.params;
     const result = service.getPinataById(id);
@@ -58,7 +58,7 @@ app.get("/api/pinatas/:id", (req, res) => {
 app.post("/api/pinatas", (req, res) => {
     const { body } = req;
     service.createPinata(body);
-    return res.status(201).send();
+    return res.status(201).json(body);
 });
 
 //  Hits a certain pinata until its hit limit has been reached.
