@@ -9,7 +9,6 @@ const service = () => {
         return candies;
     };
 
-    //hér er ein lei til að gera þetta create
     const createCandy = (candy) => {
         let highestId = 0;
         candies.forEach(u => { if(u.id > highestId) { highestId = u.id; } } );
@@ -32,7 +31,7 @@ const service = () => {
                 id: u.id,
                 name: u.name,
                 candies: Array.from(u.candies)
-            }); //hér sækir hann bara id á candy í array
+            });
         });
         getOffers.forEach(u => {
             u.candies.forEach((candy, i) => {
@@ -83,6 +82,17 @@ const service = () => {
 
     const hitPinata = (id) => {
         const pinata = pinatas.filter(u => u.id == id);
+        pinata.currentHits++; //(If the hit was a success it should return a status code of 204)
+
+        
+        //if it was the final blow than it should return a status code of 200 (OK) along with the surprise property 
+        //from the pinata as a string (the surprise will only be returned a single time) 
+        if(currenthits == maximumhits)
+        {
+
+        }  
+        
+
     };
 
     return {

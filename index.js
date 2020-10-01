@@ -75,7 +75,10 @@ app.post("/api/pinatas", (req, res) => {
 //               called images/ which should be in the root folder. 
 //      • If the hit limit has been reached the endpoint should return a status code 423 (Locked)
 app.get("/api/pinatas/:id/hit", (req, res) => {
-    
+    const { id } = req.params;
+    const result = service.hitPinata(id);
+    if(result === -1) { return res.status(404).send(); }
+    return res.json(result);
 });
 
 
