@@ -1,5 +1,5 @@
 const service = () => {
-    
+
     const candies = require('../data.json').candies;
     const offers = require('../data.json').offers;
     const pinatas = require('../data.json').pinatas;
@@ -10,39 +10,26 @@ const service = () => {
     };
 
     const createCandy = (candy) => {
-        let highestId = 0;
-        candies.forEach(u => { if(u.id > highestId) { highestId = u.id; } } );
-        candy.id = highestId + 1;
-        candies.push(candy);
-        return candy;
+        return {...candy, id: candies.sort((a, b) => b.id - a.id).find() || 1};
     };
 
     const getCandyById = (id) => {
         const candy = candies.filter(u => u.id == id);
-        if(candy.length === 0) { return -1 }
+        if(candy.length === 0) { return null}
         return candy[0];
     };
 
     /* --------------- OFFER --------------- */
     const getAllOffers = () => {
-        let getOffers = [];
-        offers.forEach(u => {
-            getOffers.push({
-                id: u.id,
-                name: u.name,
-                candies: Array.from(u.candies)
-            });
-        });
-        getOffers.forEach(u => {
-            u.candies.forEach((candy, i) => {
-                u.candies[i] = getCandyById(candy);
-            });
-        });
-        return getOffers;
+        return offers.map((e) => ({
+            id: e.id,
+            name: e.name,
+            candies: Array.from(e.candies).map((candyId) => getCandyById(candyId))
+        }));
     };
 
     /* --------------- PINATA --------------- */
-    //should contain all properties excluding surprise - check  
+    //should contain all properties excluding surprise - check
     const getAllPinatas = () => {
         let getPinatas = [];
         pinatas.forEach(u => {
@@ -59,14 +46,14 @@ const service = () => {
     //should contain all properties excluding surprise - check
     const getPinataById = (id) => {
         const pinata = getAllPinatas().filter(u => u.id == id);
-        if(pinata.length == 0) { return -1 }
+        if(pinata.length == 0) { return null }
         return pinata;
     };
 
     //fæ bara nýja ID til að birtast í postman
     const createPinata = (pinata) => {
         /*let highestId = 0;
-        pinatas.forEach(u => { if(u.id > highestId) { highestId = u.id; } }); 
+        pinatas.forEach(u => { if(u.id > highestId) { highestId = u.id; } });
         pinata.id = highestId + 1;
         pinatas.push(pinata);
         return pinata;*/
@@ -81,17 +68,23 @@ const service = () => {
     };
 
     const hitPinata = (id) => {
-        const pinata = pinatas.filter(u => u.id == id);
+        const pinata = pinatas.find(u => u.id == id);
+        if (pinata === null) {
+            return null;
+        }
+        if (pinata.currentHits === maximumHits) {
+            return 'BÚIÐ AÐ SPRENGJA';
+        }
         pinata.currentHits++; //(If the hit was a success it should return a status code of 204)
-
-        
-        //if it was the final blow than it should return a status code of 200 (OK) along with the surprise property 
-        //from the pinata as a string (the surprise will only be returned a single time) 
+        pinatas = [...pinatas.filter((e) => e.id !== id), pinata];
+        //if it was the final blow than it should return a status code of 200 (OK) along with the surprise property
+        //from the pinata as a string (the surprise will only be returned a single time)
         if(currenthits == maximumhits)
         {
+            return true;
+        }
+        return false;
 
-        }  
-        
 
     };
 
