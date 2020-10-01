@@ -10,11 +10,13 @@ const service = () => {
         return candies;
     };
 
+    //virkar ekki að bæta við candy?? :/
     const createCandy = (candy) => {
         let highestId = 0;
-        candies.forEach(u => { if(u.id > highestId) { highestId = u.id; } });
+        candies.forEach(u => { if(u.id > highestId) { highestId = u.id; } } );
         candies.id = highestId + 1;
         candies.push(candy);
+        return candy;
     };
 
     const getCandyById = (id) => {
@@ -25,7 +27,20 @@ const service = () => {
 
     /* --------------- OFFER --------------- */
     const getAllOffers = () => {
-        return offers;
+        let getOffers = [];
+        offers.forEach(u => {
+            getOffers.push({
+                id: u.id,
+                name: u.name,
+                candies: Array.from(u.candies)
+            });
+        });
+        getOffers.forEach(u => {
+            u.candies.forEach((candy, i) => {
+                u.candies[i] = getCandyById(candy);
+            });
+        });
+        return getOffers;
     };
 
     /* --------------- PINATA --------------- */

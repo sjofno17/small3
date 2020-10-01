@@ -32,8 +32,8 @@ app.get("/api/candies/:id", (req, res) => {
 /* --------------- OFFER --------------- */
 
 // Gets all offers within the application and the output should include the
-// nested candies within the offer object as seen in the Model Structure section
-app.get("/api/coffers", (req, res) => {
+// nested candies within the offer object as seen in the Model Structure section   *** DONE
+app.get("/api/offers", (req, res) => {
     return res.json(service.getAllOffers());
 });
 
