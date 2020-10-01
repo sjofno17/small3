@@ -77,7 +77,7 @@ app.post("/api/pinatas", (req, res) => {
 app.get("/api/pinatas/:id/hit", (req, res) => {
     const { id } = req.params;
     const result = service.hitPinata(id);
-    if(result === -1) { return res.status(404).send(); }
+    if(result === null) { return res.status(404).send(); }
     return res.json(result);
 });
 
