@@ -10,9 +10,9 @@ const service = () => {
     };
 
     const createCandy = (candy) => {
-        const newCandy = {...candy, id: candies.sort((a, b) => b.id - a.id).find() || 1};
+        const newCandy = {...candy, id: (candies.sort((a, b) => b.id - a.id).find((x) => x) || {}).id || 1};
         candies.push(newCandy);
-        return candy;
+        return newCandy;
     };
 
     const getCandyById = (id) => {
