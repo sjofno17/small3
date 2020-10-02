@@ -87,6 +87,9 @@ app.get("/api/pinatas/:id/hit", (req, res) => {
   if (result === -2) {
     return res.status(423).send();
   }
+  if (result === -3) {
+    return res.status(500).send();
+  }
   if (result === 1) {
     return res.status(204).send();
   }

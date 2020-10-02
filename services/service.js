@@ -119,9 +119,16 @@ const service = () => {
             break;
           }
         }
-        request(pinata.surprise).pipe(
-          fs.createWriteStream("images/" + pinata.name + "." + extension)
-        );
+        //If image extension create file
+        if (extension != "") {
+          request(pinata.surprise)
+            .on("error", function (err) {
+              return -3;
+            })
+            .pipe(
+              fs.createWriteStream("images/" + pinata.name + "." + extension)
+            );
+        }
       } else {
         fs.appendFile("surprises.txt", pinata.surprise + " ", function (err) {
           if (err) return false;
