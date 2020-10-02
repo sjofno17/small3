@@ -43,12 +43,14 @@
             "id": 1,
             "name": "Wheaty",
             "surprise": "5 kg of Z&Zs!",
+			"currentHits": 0,
             "maximumHits": 5
         },
         {
             "id": 2,
             "name": "Snappy",
             "surprise": "Two meters of Brix!",
+			"currentHits": 0,
             "maximumHits": 10
         }
     ]

@@ -1,104 +1,150 @@
 const service = () => {
-    
-    const candies = require('../data.json').candies;
-    const offers = require('../data.json').offers;
-    const pinatas = require('../data.json').pinatas;
+  const candies = require("../data.json").candies;
+  const offers = require("../data.json").offers;
+  const pinatas = require("../data.json").pinatas;
+  const fs = require("fs");
+  const URL = require("url").URL;
+  const request = require("request");
+  const extensionTypes = ["jpg", "jpeg", "tiff", "png", "gif", "bmp"];
 
-    /* --------------- CANDY --------------- */
-    const getAllCandies = () => {
-        return candies;
+  /* --------------- CANDY --------------- */
+  const getAllCandies = () => {
+    return candies;
+  };
+
+  const createCandy = (candy) => {
+    let highestId = 0;
+    candies.forEach((u) => {
+      if (u.id > highestId) {
+        highestId = u.id;
+      }
+    });
+    candy.id = highestId + 1;
+    candies.push(candy);
+    return candy;
+  };
+
+  const getCandyById = (id) => {
+    const candy = candies.filter((u) => u.id == id);
+    if (candy.length === 0) {
+      return -1;
+    }
+    return candy[0];
+  };
+
+  /* --------------- OFFER --------------- */
+  const getAllOffers = () => {
+    let getOffers = [];
+    offers.forEach((u) => {
+      getOffers.push({
+        id: u.id,
+        name: u.name,
+        candies: Array.from(u.candies),
+      });
+    });
+    getOffers.forEach((u) => {
+      u.candies.forEach((candy, i) => {
+        u.candies[i] = getCandyById(candy);
+      });
+    });
+    return getOffers;
+  };
+
+  /* --------------- PINATA --------------- */
+  //should contain all properties excluding surprise - check
+  const getAllPinatas = () => {
+    let getPinatas = [];
+    pinatas.forEach((u) => {
+      getPinatas.push({
+        id: u.id,
+        name: u.name,
+        maximumHits: u.maximumHits,
+        currentHits: u.currentHits,
+      });
+    });
+    return getPinatas;
+  };
+
+  //should contain all properties excluding surprise - check
+  const getPinataById = (id) => {
+    const pinata = getAllPinatas().filter((u) => u.id == id);
+    if (pinata.length == 0) {
+      return -1;
+    }
+    return pinata;
+  };
+
+  const createPinata = (pinata) => {
+    const newPinata = {
+      id: pinatas.length + 1,
+      name: pinata.name,
+      surprise: pinata.surprise,
+      maximumHits: pinata.maximumHits,
+      currentHits: 0,
     };
+    pinatas.push(newPinata);
+    return newPinata;
+  };
 
-    const createCandy = (candy) => {
-        let highestId = 0;
-        candies.forEach(u => { if(u.id > highestId) { highestId = u.id; } } );
-        candy.id = highestId + 1;
-        candies.push(candy);
-        return candy;
-    };
+  const stringIsUrl = (s) => {
+    //Used to test if surprise is an URL
+    try {
+      new URL(s);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
 
-    const getCandyById = (id) => {
-        const candy = candies.filter(u => u.id == id);
-        if(candy.length === 0) { return -1 }
-        return candy[0];
-    };
+  const hitPinata = (id) => {
+    const pinata = pinatas.find((u) => u.id == id);
+    if (pinata.length == 0) {
+      return -1;
+    }
 
-    /* --------------- OFFER --------------- */
-    const getAllOffers = () => {
-        let getOffers = [];
-        offers.forEach(u => {
-            getOffers.push({
-                id: u.id,
-                name: u.name,
-                candies: Array.from(u.candies)
-            });
+    if (pinata.currentHits == pinata.maximumHits) {
+      return -2;
+    }
+
+    pinata.currentHits++;
+
+    //If last hit
+    if (pinata.currentHits == pinata.maximumHits) {
+      if (stringIsUrl(pinata.surprise)) {
+        //If url find extension
+        var extension = "";
+        for (var a = 0; a < extensionTypes.length; a++) {
+          if (pinata.surprise.includes(extensionTypes[a])) {
+            extension = extensionTypes[a];
+            break;
+          }
+        }
+        request(pinata.surprise).pipe(
+          fs.createWriteStream("images/" + pinata.name + "." + extension)
+        );
+      } else {
+        fs.appendFile("surprises.txt", pinata.surprise + " ", function (err) {
+          if (err) return false;
         });
-        getOffers.forEach(u => {
-            u.candies.forEach((candy, i) => {
-                u.candies[i] = getCandyById(candy);
-            });
-        });
-        return getOffers;
-    };
+      }
+      return pinata.surprise;
+    }
 
-    /* --------------- PINATA --------------- */
-    //should contain all properties excluding surprise - check  
-    const getAllPinatas = () => {
-        let getPinatas = [];
-        pinatas.forEach(u => {
-            getPinatas.push({
-                id: u.id,
-                name: u.name,
-                maximumHits: u.maximumHits,
-                currentHits: u.currentHits
-            });
-        });
-        return getPinatas;
-    };
+    if (pinata.currentHits != pinata.maximumhits) {
+      return 1;
+    }
+  };
 
-    //should contain all properties excluding surprise - check
-    const getPinataById = (id) => {
-        const pinata = getAllPinatas().filter(u => u.id == id);
-        if(pinata.length == 0) { return -1 }
-        return pinata;
-    };
-
-    const createPinata = (pinata) => {
-        const newPinata = {
-            id: pinatas.length +1,
-            name: pinata.name,
-            surprise: pinata.surprise,
-            maximumHits: pinata.maximumHits
-        };
-        pinatas.push(newPinata);
-        return newPinata;
-    };
-
-    const hitPinata = (id) => {
-        const pinata = pinatas.filter(u => u.id == id);
-        pinata.currentHits++; //(If the hit was a success it should return a status code of 204)
-
-        
-        //if it was the final blow than it should return a status code of 200 (OK) along with the surprise property 
-        //from the pinata as a string (the surprise will only be returned a single time) 
-        if(currenthits == maximumhits)
-        {
-
-        }  
-        
-
-    };
-
-    return {
-        getAllCandies,
-        createCandy,
-        getCandyById,
-        getAllOffers,
-        getAllPinatas,
-        getPinataById,
-        createPinata,
-        hitPinata
-    };
+  return {
+    getAllCandies,
+    createCandy,
+    getCandyById,
+    getAllOffers,
+    getAllPinatas,
+    getPinataById,
+    createPinata,
+    hitPinata,
+  };
 };
 
 module.exports = service();
