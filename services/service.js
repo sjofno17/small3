@@ -63,13 +63,7 @@ const service = () => {
         return pinata;
     };
 
-    //fæ bara nýja ID til að birtast í postman
     const createPinata = (pinata) => {
-        /*let highestId = 0;
-        pinatas.forEach(u => { if(u.id > highestId) { highestId = u.id; } }); 
-        pinata.id = highestId + 1;
-        pinatas.push(pinata);
-        return pinata;*/
         const newPinata = {
             id: pinatas.length +1,
             name: pinata.name,
